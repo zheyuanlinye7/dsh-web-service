@@ -1,0 +1,31 @@
+# dsh-web-service — DSH bundle patch layer
+#
+# Mounts the Windows-service manager through the in-box
+# @deepseek-ai/dsh-mcp-client bridge, so the model sees tools named
+# mcp__winsvc__service_status, mcp__winsvc__service_install, and so on.
+#
+# Path resolution: `!!js` expressions interpolate against the boot tree, whose
+# baseUrl is the PROFILE directory rather than this file\'s package directory.
+# Resolving the entry point through createRequire anchored at the profile keeps
+# the patch free of hard-coded paths and correct under any $DSH_HOME, any pnpm
+# store layout, and both the CLI/Web host and the Electron desktop host.
+#
+# Inserted DISABLED on purpose: installing a Windows service needs
+# administrator rights, and a profile should not acquire that capability just
+# because a package was added. Flip `disabled` to false (or edit the row in
+# the Plugins page) once you want the tools to appear.
+
+- insert:
+    - id: mcp-dsh-web-service
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: winsvc
+        transport: stdio
+        command: !!js process.execPath
+        args:
+          - !!js "process.getBuiltinModule('node:module').createRequire(new URL('package.json', baseUrl)).resolve('dsh-web-service/mcp/server.mjs')"
+        env:
+          ELECTRON_RUN_AS_NODE: '1'
+        toolCallTimeoutMs: 180000
+        failOnStartupError: false

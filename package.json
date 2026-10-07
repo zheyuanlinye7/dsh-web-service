@@ -1,0 +1,70 @@
+{
+  "name": "dsh-web-service",
+  "version": "0.1.0",
+  "description": "Run `dsh web` as a Windows service: auto-start at boot, no console window, survives sign-out. A DeepSeek Harness plugin with MCP tools, a settings-free CLI, and a real-world diagnostic engine.",
+  "type": "module",
+  "bin": {
+    "dsh-web-service": "bin/dsh-web-service.mjs"
+  },
+  "main": "src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./mcp/server.mjs": "./mcp/server.mjs",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src/",
+    "bin/",
+    "mcp/",
+    "docs/",
+    "cordis.patch.yml",
+    "README.md",
+    "README.en.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "THIRD_PARTY.md"
+  ],
+  "dsh": {
+    "manifestVersion": 1,
+    "engines": {
+      "dsh": ">=0.2.0-rc.1 <0.3.0"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "os": [
+    "win32"
+  ],
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "mcp",
+    "windows-service",
+    "nssm",
+    "winsw",
+    "service-manager",
+    "autostart"
+  ],
+  "license": "MIT",
+  "author": "zheyuanlinye7",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zheyuanlinye7/dsh-web-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zheyuanlinye7/dsh-web-service/issues"
+  },
+  "homepage": "https://github.com/zheyuanlinye7/dsh-web-service#readme",
+  "scripts": {
+    "test": "node test/run-tests.mjs",
+    "selftest": "node mcp/server.mjs --self-test",
+    "mcp-list": "node test/mcp-list.mjs"
+  },
+  "dependencies": {}
+}
